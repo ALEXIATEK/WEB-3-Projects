@@ -12,3 +12,4 @@ npx hardhat node
 npx hardhat ignition deploy ./ignition/modules/Lock.js
 npx hardhat compile
 npx hardhat run deploy.js --network sepolia
+npx hardhat verify --network sepolia "contract address"
