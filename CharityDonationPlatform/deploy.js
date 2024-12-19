@@ -9,7 +9,7 @@ async function main() {
 
     const [deployer] = await hre.ethers.getSigners();
     
-    const charityDonations = await CharityDonations.deploy(0xC741e92081b8a1a4f474Ddb2C1EdB3Fd459862ea);
+    const charityDonations = await CharityDonations.deploy("0xC741e92081b8a1a4f474Ddb2C1EdB3Fd459862ea");
 
     await charityDonations.waitForDeployment();
 
