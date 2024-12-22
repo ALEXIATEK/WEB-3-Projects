@@ -50,7 +50,6 @@ contract Escrow {
      }
 
      function ReleaseFunds ( uint256 _amount, address _seller, address _escrowAgent) public payable {
-        require ( msg.value >= _amount, " Not enough funds");
     
         emit fundsReleased (_amount, _seller, _escrowAgent );
 

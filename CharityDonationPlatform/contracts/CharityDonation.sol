@@ -49,7 +49,10 @@ contract CharityDonations {
 
        // Campaign creation
        function createCharity(string memory _name, uint256 _goalAmount, string memory _description, uint256 _duration ) external {
+          require (charitiesCount < 20, "No space available for more charities");
+
           charitiesCount++;
+
           charities[charitiesCount] = Charity ({
             Id: charitiesCount,
             name: _name,
