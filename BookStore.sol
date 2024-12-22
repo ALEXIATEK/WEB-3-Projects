@@ -74,6 +74,8 @@ contract BookStore {
         emit BookPurchased(_bookId, msg.sender, _quantity);
     }
 
+    // Assignment 1
+      // Remove a book
     function removeBook(uint256 _bookId) public {
        require(books[_bookId].isAvailable, "Book doesn't exist");
        delete (books[_bookId]);
@@ -86,6 +88,7 @@ contract BookStore {
         }
     }
 
+     // get all books
     function getAllBooks() public view returns (Book[] memory ) {
         Book[] memory allBooks = new Book[](bookIds.length);
         for  (uint256 i = 0; i < bookIds.length; i++) {
@@ -95,6 +98,7 @@ contract BookStore {
     return allBooks;
     }
 
+     // Remove all books
     function removeAllBooks() public {
         require(bookIds.length > 0, "No books to remove" );
         for (uint256 i=0; i<bookIds.length; i++) {
