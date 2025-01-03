@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useAccount, useConnect, useDisconnect } from 'wagmi'
 
@@ -46,3 +46,5 @@ function App() {
 }
 
 export default App
+
+

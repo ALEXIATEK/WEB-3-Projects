@@ -88,7 +88,7 @@ contract BookStore {
         }
     }
 
-     // get all books
+     // Get all books
     function getAllBooks() public view returns (Book[] memory ) {
         Book[] memory allBooks = new Book[](bookIds.length);
         for  (uint256 i = 0; i < bookIds.length; i++) {
@@ -107,6 +107,8 @@ contract BookStore {
         delete bookIds;
     
     }
+
+    //Check all books sold // Detect owner balance after purchase
 
 
 
