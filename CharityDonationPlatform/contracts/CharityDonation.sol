@@ -4,7 +4,7 @@ pragma solidity >=0.8.2 <0.9.0;
 
 contract CharityDonations {
     address public admin; //The admin of the platform
-
+ 
     uint public charitiesCount; //total number of available charity campaigns
 
        struct Charity {
@@ -30,6 +30,8 @@ contract CharityDonations {
         event CharityCreated ( uint CharityId, string name, string description, uint256 duration, address creator,  uint goalAmount, uint currentAmount );
         event DonationRecieved ( address donor, uint amount, uint CharityId);
         event WithdrawalMade ( uint CharityId, uint amount, address reciever);
+        event CharityDeactivated ( uint CharityId);
+        event DonationRefunded(address donor, uint CharityId, uint amount);
 
         constructor (address _admin) {
             admin = _admin; // Set the platform admin
@@ -75,7 +77,7 @@ contract CharityDonations {
           );
        }
 
-       //  Donors can donate to a campaign 
+       // Donors can donate to a campaign 
        function donateFunds(uint CharityId) external payable {
          require(charities[CharityId].isActive, "Charity not available.");
          require(msg.value > 0, "Donation must be greater than zero");
@@ -102,8 +104,38 @@ contract CharityDonations {
        // Campaign deactivation when goal is attained
        function deactivateCharity (uint CharityId ) external onlyAdmin {
         require(charities[CharityId].isActive, "Charity not available");
+        require(charities[CharityId].duration > block.timestamp, "Charity duration still on");
+
+       if (charities[CharityId].duration <= block.timestamp) {
+        emit CharityDeactivated(CharityId);
+        charities[CharityId].isActive == false;
+       }
+
+        charitiesCount -- ;
 
         charities[CharityId].isActive = false;
+        emit CharityDeactivated ( CharityId);
        }
+
+       // Refund funds when target is not met
+       function refundDonation (uint CharityId) external {
+         require(charities[CharityId].isActive, "Charity is not available");
+         require(charities[CharityId].duration < block.timestamp, "Charity is not over yet");
+         require(charities[CharityId].currentAmount > 0, "No funds available");
+         require(charities[CharityId].goalAmount > charities[CharityId].currentAmount, "Charity reached it's goal");
+
+         uint donorContribution = donations[msg.sender][CharityId];
+        require(donorContribution > 0, "No contributions found for this charity");
+
+        Charity.currentAmount -= donorContribution;
+           donations[msg.sender][CharityId] = 0;
+
+        payable(msg.sender).transfer(donorContribution);
+
+        emit DonationRefunded(msg.sender, CharityId, donorContribution)
+
+       }
+ 
+
 
     }
